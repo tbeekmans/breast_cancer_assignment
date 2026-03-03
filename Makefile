@@ -16,7 +16,11 @@ PYTHON_INTERPRETER = python
 requirements:
 	conda env update --name $(PROJECT_NAME) --file environment.yml --prune
 	
-
+## Set up nbautoexport for notebooks
+.PHONY: nbautoexport
+nbautoexport:
+    nbautoexport install
+    nbautoexport configure notebooks
 
 
 ## Delete all compiled Python files
