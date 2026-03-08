@@ -14,7 +14,7 @@
 # **Goal:**
 # Develop a machine learning model to accurately classify breast cancer cases as malignant or benign.
 
-# Importing Libraries
+# Import libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,8 +23,11 @@ from scipy.stats import zscore
 from scipy.stats import pointbiserialr
 from breast_cancer_assignment.dataset import load_data
 
-# Configuring Notebook Settings
+# Notebook settings
 pd.set_option('display.max_columns', None)
+
+# Load dataset
+df = load_data()
 
 
 # # 2.0 Data Understanding
