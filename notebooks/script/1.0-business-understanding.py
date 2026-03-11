@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Assignment 1: Classify Breast Cancer Cases
+# # Assignment 1: Breast Cancer Classification
 # 
 # Author: Tobias Beekmans  
 # Master ICT – Software Engineering  
@@ -32,7 +32,9 @@
 # 
 # The objective of this project is to investigate whether diagnostic features extracted from breast tumour samples can be used to accurately classify tumours as malignant or benign using machine learning methods. This task represents a supervised binary classification problem in which each observation contains numerical features describing morphological characteristics of cell nuclei derived from fine needle aspiration (FNA) images, while the target variable indicates whether the tumour is malignant or benign. [2]
 # 
-# Reliable classification is particularly important in medical contexts because incorrect predictions may have serious consequences. In particular, predicting a malignant tumour as benign (a false negative) may delay necessary treatment and negatively affect patient outcomes. For this reason, model evaluation should consider not only overall accuracy but also metrics such as recall and precision when assessing diagnostic models. [3] To investigate this classification task, several classical machine learning algorithms are applied to the "Breast Cancer Wisconsin (Diagnostic)" dataset in order to evaluate how effectively these diagnostic features support tumour classification. [2]
+# Reliable classification is particularly important in medical contexts because incorrect predictions may have serious consequences. In particular, predicting a malignant tumour as benign (a false negative) may delay necessary treatment and negatively affect patient outcomes. For this reason, model evaluation should consider not only overall accuracy but also metrics such as recall and precision when assessing diagnostic models. [3] 
+# 
+# To investigate this classification task, several classical machine learning algorithms are applied to the "Breast Cancer Wisconsin (Diagnostic)" dataset in order to evaluate how effectively these diagnostic features support tumour classification. [2]
 # 
 # The analysis follows the CRISP-DM methodology, which structures data science projects into iterative phases including business understanding, data understanding, data preparation, modelling, and evaluation. [6]
 # 
@@ -71,13 +73,11 @@
 
 # ## 1.6 Inventory of Resources
 # 
-# This project is conducted as an individual assignment within the DataOps specialisation.
+# This project is conducted as an individual assignment within the DataOps specialization.
 # 
 # **Personnel:**
 # - Analyst: One student responsible for implementing the complete data science workflow
-# - Academic Stakeholders: Course lecturers can be asked for advice during the project
-# - Domain Stakeholders: Domain experts/practitioners who may be contacted to provide insights related to medical domain
-# - Research Stakeholders: Data scientists who may be contacted to share knowledge related to medical dataset analysis
+# - Teaching Staff: Course lecturers can be asked for advice during the project
 # 
 # **Data Resources:**
 # - Dataset: Breast Cancer Wisconsin (Diagnostic) dataset retrieved from the UCI Machine Learning Repository [1]
@@ -88,10 +88,11 @@
 # **Software and Tools:**
 # - Environment Management: Conda environment for dependency management and reproducibility
 # - Programming Language: Python 3.11
-# - Development Environment: Jupyter Notebooks for EDA
+# - Development Environment: Jupyter Notebooks for implementing and documenting the CRISP-DM workflow
 # - Data Analysis Libraries: Python libraries for data processing (e.g. pandas, numpy)
 # - Machine Learning Frameworks: Libraries for implementing machine learning models (e.g. scikit-learn)
 # - Visualization Tools: Libraries for data visualisation (e.g. matplotlib, seaborn)
+# - Version Control: Git for managing code versions and experiment iterations
 # - Reference Management: Zotero to manage literature and citations
 
 # ## 1.7 Constraints and Assumptions
