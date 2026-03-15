@@ -149,5 +149,4 @@ breast_cancer_assignment/
 
 # Acknowledgements
 
-Generative AI tools were used during the preparation of this assignment to support language refinement and occasionally for code clarification or debugging. All analytical decisions, implementations, and interpretations were developed by the author based on the knowledge gained during the literature research.
-
+Generative AI tools were used during the preparation of this assignment to support language refinement and occasionally for code clarification or debugging. All analytical decisions, implementations, and interpretations were developed by the author based on the knowledge gained during course workshops and literature research.
