@@ -19,8 +19,8 @@ requirements:
 ## Set up nbautoexport for notebooks
 .PHONY: nbautoexport
 nbautoexport:
-    nbautoexport install
-    nbautoexport configure notebooks
+	nbautoexport install
+	nbautoexport configure notebooks
 
 
 ## Delete all compiled Python files
