@@ -1,55 +1,39 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Assignment 1: Classify Breast Cancer Cases
+# # Assignment 1: Breast Cancer Classification
 # 
 # Author: Tobias Beekmans  
 # Master ICT – Software Engineering  
 # DataOps Specialisation Project – Individual Assignment  
 # Submission Date: 15.03.2026
-# 
-# **Short Description:**
-# The Breast Cancer dataset [1] is a widely used dataset for learning and practicing machine learning techniques. It contains diagnostic data for breast cancer cases, including features computed from digitized images of a fine needle aspirate (FNA) of a breast mass. These features describe characteristics of the cell nuclei, such as radius, texture, and smoothness, and are compiled into a convenient dataset.
-# 
-# **Goal:**
-# Develop a machine learning model to accurately classify breast cancer cases as malignant or benign.
 
-# Data handling
 import pandas as pd
 from pathlib import Path
 
-# Visualization
 import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Models
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 
-# Metrics
-from sklearn.metrics import (
-    confusion_matrix,
-    roc_curve,
-    roc_auc_score
-)
+from sklearn.metrics import (confusion_matrix, roc_curve, roc_auc_score)
 
 
 data_dir = Path("../data/processed")
 
 X_train = pd.read_csv(data_dir / "X_train_scaled.csv")
 X_test = pd.read_csv(data_dir / "X_test_scaled.csv")
-
 y_train = pd.read_csv(data_dir / "y_train.csv").squeeze("columns")
 y_test = pd.read_csv(data_dir / "y_test.csv").squeeze("columns")
 
 
 # # 5. Evaluation
+# 
+# Following the CRISP-DM methodology, the evaluation phase assesses whether the trained models meet the objectives defined in the earlier phases and whether the obtained results are suitable for the classification task. [1]
+# 
+# In this project, the evaluation focuses on analysing classification errors, comparing model discrimination performance, and selecting the most suitable final model for breast cancer diagnosis.
 
 log_model = LogisticRegression(max_iter=1000, random_state=42)
 rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-svm_model = SVC(kernel="rbf", probability=True, random_state=42)
+svm_model = SVC(kernel="rbf", C=1, gamma="scale", probability=True, random_state=42)
 knn_model = KNeighborsClassifier(n_neighbors=5)
 
 log_model.fit(X_train, y_train)
@@ -65,13 +49,15 @@ y_pred_knn = knn_model.predict(X_test)
 
 # ## 5.1 Evaluation Objectives
 # 
-# The purpose of the evaluation phase is to assess the performance of the trained models and determine which model is most suitable for the breast cancer classification task.
+# The purpose of the evaluation phase is to assess whether the trained models meet the objectives defined in the earlier phases and to determine which model is most suitable for the breast cancer classification task.
 # 
-# In a medical diagnostic context, evaluation metrics such as recall and false negative rates are particularly important, since incorrectly classifying malignant tumours as benign may delay necessary treatment.
+# In a medical diagnostic context, evaluation must consider not only overall accuracy but also the ability to correctly identify malignant tumours. False negatives are particularly critical because incorrectly classifying a malignant tumour as benign may delay necessary treatment.
 # 
-# Therefore, the evaluation focuses on confusion matrices, ROC curves, and overall classification performance.
+# The evaluation therefore focuses on confusion matrices, ROC curves, AUC values, and the overall balance between predictive performance and interpretability.
 
 # ## 5.2 Confusion Matrix
+# 
+# The confusion matrices provide a detailed view of the classification errors made by each model.
 
 def plot_confusion_matrix(y_true, y_pred, title):
 
@@ -92,7 +78,13 @@ plot_confusion_matrix(y_test, y_pred_svm, "Confusion Matrix – SVM")
 plot_confusion_matrix(y_test, y_pred_knn, "Confusion Matrix – KNN")
 
 
+# Logistic Regression and Support Vector Machine show very similar error patterns and produce only a small number of misclassifications. In particular, both models correctly identify most malignant and benign cases, which is important in a medical diagnosis setting.
+# 
+# Random Forest and K-Nearest Neighbours also perform well, but they show slightly more classification errors than the two best-performing models. From a clinical perspective, false negatives are especially important because malignant tumours should not be missed. The confusion matrices indicate that Logistic Regression and SVM handle this requirement particularly well.
+
 # ## 5.3 ROC Curve and AUC
+# 
+# The ROC curves compare the discrimination ability of the evaluated models across different classification thresholds. A model with a curve closer to the top-left corner indicates stronger class separation, while the AUC summarizes this performance in a single value.
 
 y_prob_log = log_model.predict_proba(X_test)[:,1]
 y_prob_rf = rf_model.predict_proba(X_test)[:,1]
@@ -127,14 +119,32 @@ plt.legend()
 plt.show()
 
 
-# ## 5.4 Model Comparison and Discussion
+# Logistic Regression and Support Vector Machine achieve the strongest ROC performance, with curves that remain closest to the upper-left corner and the highest AUC values. Random Forest and K-Nearest Neighbours also show strong discrimination ability, but their ROC curves lie slightly below those of the best-performing models.
 # 
-# The evaluation results show that several models achieve very high classification performance on the dataset. Logistic Regression, Random Forest, and Support Vector Machine achieve nearly identical results, indicating that the classes are relatively well separable in the feature space.
+# These results confirm that the diagnostic features provide strong predictive information for distinguishing benign and malignant tumours and that Logistic Regression and SVM are the most effective classifiers in this experiment.
+
+# ## 5.4 Assessment Against Objectives
 # 
-# K-Nearest Neighbours performs slightly worse, which may be due to the high dimensionality of the dataset. Distance-based methods can become less effective when many features are present.
+# The evaluation results indicate that the modelling phase successfully addressed the main objective of the project: classifying breast tumours as malignant or benign using diagnostic features extracted from fine needle aspiration images.
+# 
+# All evaluated machine learning models clearly outperform the baseline classifier, showing that the dataset contains strong predictive signals. Logistic Regression and Support Vector Machine achieve the strongest overall performance, while Random Forest and K-Nearest Neighbours also provide reliable classification results.
+# 
+# These findings support the earlier data understanding results, which suggested that tumour size and boundary irregularity contain strong diagnostic information. The evaluation therefore confirms that classical machine learning methods are suitable for this classification task and that the prepared dataset supports accurate tumour classification.
 
 # ## 5.5 Final Model Selection
 # 
-# Considering both predictive performance and model interpretability, Logistic Regression represents a suitable final model.
+# Considering the evaluation results, Logistic Regression is selected as the final model for this project.
 # 
-# The model achieves high accuracy and recall while remaining relatively simple and interpretable compared to more complex models such as Random Forest or Support Vector Machines.
+# Logistic Regression achieves the highest classification performance, matching the Support Vector Machine in accuracy while also showing very strong precision, recall, and F1-score. At the same time, Logistic Regression offers greater interpretability than SVM, because the relationship between the predictors and the classification outcome can be more directly examined through the model coefficients.
+# 
+# This creates an important trade-off: while both models perform equally well in predictive terms, Logistic Regression provides a simpler and more transparent solution. In a medical decision support context, such transparency can be advantageous because model behaviour is easier to explain and justify.
+# 
+# The final evaluation therefore suggests that Logistic Regression provides the most suitable balance between predictive performance and interpretability for the breast cancer classification task.
+
+# ## References
+# 
+# [1] IBM Corporation (2011): *IBM SPSS Modeler CRISP-DM Guide*
+# 
+# [2] Müller, A. C.; Guido, S. (2016): *Introduction to Machine Learning with Python*
+# 
+# [3] Rovshenov, A.; Peker, S. (2022): *Performance Comparison of Different Machine Learning Techniques for Early Prediction of Breast Cancer using Wisconsin Breast Cancer Dataset*

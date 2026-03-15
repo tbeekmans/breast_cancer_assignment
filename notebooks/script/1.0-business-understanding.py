@@ -20,25 +20,19 @@
 # 
 # Breast cancer diagnosis commonly involves analysing tissue samples to determine whether a tumour is malignant or benign. One frequently used method is fine-needle aspiration (FNA), where cells from a breast mass are collected and examined microscopically. Quantitative features describing the morphology of the cell nuclei can be extracted from these samples and used for computational analysis of tumour characteristics. [2]
 # 
-# Machine learning methods are increasingly applied in medical research and clinical decision support. These algorithms can analyse complex datasets and identify patterns that may assist clinicians in diagnostic and predictive tasks. In medical contexts, such models are typically used as decision-support systems that complement clinical expertise rather than replacing it. [3]
+# Machine learning methods are increasingly applied in medical research and clinical decision support systems to assist in analysing complex biomedical data and improving diagnostic accuracy. In medical contexts, such models are typically used as decision-support tools that complement clinical expertise rather than replace it. [3]
 # 
-# Several studies have explored the use of machine learning techniques for cancer detection. Classification algorithms such as Support Vector Machines (SVM) and Artificial Neural Networks (ANN) have demonstrated strong predictive performance when applied to biomedical datasets, helping researchers identify patterns related to cancer diagnosis. [4]
+# Several studies have explored the use of machine learning techniques for cancer detection and have reported promising results for classification tasks based on biomedical data. [4] Comparative studies on breast cancer datasets further indicate that classical machine learning approaches can achieve strong predictive performance when distinguishing between benign and malignant tumours using diagnostic features. [5]
 # 
-# Comparative studies of machine learning approaches applied to breast cancer datasets have reported promising results for multiple classification algorithms. Models such as logistic regression, support vector machines, and ensemble methods have achieved high accuracy when distinguishing between benign and malignant tumours based on diagnostic features. [5]
-# 
-# In this project, classical machine learning models are therefore applied to the Breast Cancer Wisconsin dataset in order to evaluate their ability to classify tumours based on these extracted diagnostic features.
+# In this assignment, the "Breast Cancer Wisconsin (Diagnostic)" dataset is used to examine whether such diagnostic features can support accurate tumour classification.
 
 # ## 1.2 Problem Statement
 # 
-# The objective of this project is to investigate whether diagnostic features extracted from breast tumour samples can be used to accurately classify tumours as malignant or benign using machine learning methods. This task represents a supervised binary classification problem in which each observation contains numerical features describing morphological characteristics of cell nuclei derived from fine needle aspiration (FNA) images, while the target variable indicates whether the tumour is malignant or benign. [2]
+# The objective of this project is to determine how accurately breast tumours can be classified as malignant or benign using diagnostic features derived from fine needle aspiration (FNA) images. From a machine learning perspective, this represents a supervised binary classification problem in which numerical predictors are used to estimate a binary diagnostic outcome. [2]
 # 
-# Reliable classification is particularly important in medical contexts because incorrect predictions may have serious consequences. In particular, predicting a malignant tumour as benign (a false negative) may delay necessary treatment and negatively affect patient outcomes. For this reason, model evaluation should consider not only overall accuracy but also metrics such as recall and precision when assessing diagnostic models. [3] 
+# Reliable classification is particularly important in medical contexts because incorrect predictions may have serious consequences. In particular, predicting a malignant tumour as benign may delay treatment and negatively affect patient outcomes. For this reason, model evaluation should consider not only overall accuracy but also measures such as recall and precision. [3]
 # 
-# To investigate this classification task, several classical machine learning algorithms are applied to the "Breast Cancer Wisconsin (Diagnostic)" dataset in order to evaluate how effectively these diagnostic features support tumour classification. [2]
-# 
-# The analysis follows the CRISP-DM methodology, which structures data science projects into iterative phases including business understanding, data understanding, data preparation, modelling, and evaluation. [6]
-# 
-# The resulting workflow aims to provide a reproducible and transparent pipeline for training and evaluating machine learning models for breast cancer classification.
+# The analysis therefore focuses on training and comparing several classical machine learning models on the "Breast Cancer Wisconsin (Diagnostic)" dataset in order to identify a suitable approach for this classification task. The workflow follows the CRISP-DM methodology, covering business understanding, data understanding, data preparation, modelling, and evaluation [6].
 
 # ## 1.3 Stakeholders
 # 
@@ -143,16 +137,16 @@
 
 # ## References
 # 
-# [1] UCI Machine Learning Repository: Breast Cancer Wisconsin (Diagnostic) Dataset. Retrieved from https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)
+# [1] UCI Machine Learning Repository (1995): *Breast Cancer Wisconsin (Diagnostic)*. Retrieved from https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)
 # 
-# [2] Street, W. N.; Wolberg, W. H.; Mangasarian, O. L. (1993): Nuclear feature extraction for breast tumor diagnosis
+# [2] Street, W. N.; Wolberg, W. H.; Mangasarian, O. L. (1993): *Nuclear feature extraction for breast tumor diagnosis*
 # 
-# [3] Sidey-Gibbons J. A. M.; Sidey-Gibbons, C. J. (2019): Machine learning in medicine: a practical introduction
+# [3] Sidey-Gibbons, J. A. M.; Sidey-Gibbons, C. J. (2019): *Machine learning in medicine: a practical introduction*
 # 
-# [4] Sharma, A.; Kulshrestha S.; Daniel, S. (2018): Machine Learning Approaches for Cancer Detection
+# [4] Sharma, A.; Kulshrestha, S.; Daniel, S. (2018): *Machine Learning Approaches for Cancer Detection*
 # 
-# [5] Rovshenov, A; Peker, S. (2022): Performance Comparison of Different Machine Learning Techniques for Early Prediction of Breast Cancer using Wisconsin Breast Cancer Dataset
+# [5] Rovshenov, A.; Peker, S. (2022): *Performance Comparison of Different Machine Learning Techniques for Early Prediction of Breast Cancer using Wisconsin Breast Cancer Dataset*
 # 
-# [6] IBM Corporation (2011): IBM SPSS Modeler CRISP-DM Guide
+# [6] IBM Corporation (2011): *IBM SPSS Modeler CRISP-DM Guide*
 # 
 # [7] Saxion Brightspace: DataOps Specializaton - Module Website - Indiviual Assignment - Information & Rubric. Retrieved from https://data-ops-project-module-ed0669.gitlab.io/manual.html

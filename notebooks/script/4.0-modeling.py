@@ -1,43 +1,24 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Assignment 1: Classify Breast Cancer Cases
+# # Assignment 1: Breast Cancer Classification
 # 
 # Author: Tobias Beekmans  
 # Master ICT – Software Engineering  
 # DataOps Specialisation Project – Individual Assignment  
 # Submission Date: 15.03.2026
-# 
-# **Short Description:**
-# The Breast Cancer dataset [1] is a widely used dataset for learning and practicing machine learning techniques. It contains diagnostic data for breast cancer cases, including features computed from digitized images of a fine needle aspirate (FNA) of a breast mass. These features describe characteristics of the cell nuclei, such as radius, texture, and smoothness, and are compiled into a convenient dataset.
-# 
-# **Goal:**
-# Develop a machine learning model to accurately classify breast cancer cases as malignant or benign.
 
-# # 4. Modelling
-# 
-# This section focuses on selecting, training, and evaluating machine learning models
-# to classify breast cancer cases as malignant or benign.
-# 
-# The modelling phase follows the CRISP-DM methodology and includes model selection,
-# training, hyperparameter tuning, and performance evaluation.
-
-# Data handling
 import pandas as pd
 from pathlib import Path
-
-# Visualization
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Models
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 
-# Metrics
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score)
 
 
@@ -45,7 +26,6 @@ data_dir = Path("../data/processed")
 
 X_train = pd.read_csv(data_dir / "X_train_scaled.csv")
 X_test = pd.read_csv(data_dir / "X_test_scaled.csv")
-
 y_train = pd.read_csv(data_dir / "y_train.csv").squeeze("columns")
 y_test = pd.read_csv(data_dir / "y_test.csv").squeeze("columns")
 
@@ -56,31 +36,47 @@ print("Training labels:", y_train.shape)
 print("Test labels:", y_test.shape)
 
 
+# # 4. Modeling
+# 
+# Following the CRISP-DM methodology, the modeling phase includes selecting appropriate modeling techniques, defining a test design, building models, and assessing their performance. [1]
+# 
+# In this project, this phase includes model selection, baseline comparison, model training, and assessment of predictive performance.
+
 # ## 4.1 Model Selection
 # 
-# Several machine learning models are evaluated to determine which approach
-# performs best for the breast cancer classification task.
+# Several algorithms are evaluated to compare different modelling approaches for the breast cancer classification task. Comparative studies using the Wisconsin Breast Cancer dataset report strong predictive performance for classical machine learning models such as logistic regression, support vector machines, random forests, and k-nearest neighbours. In particular, comparison studies show that these algorithms consistently achieve classification accuracies above 95% on the dataset, making them suitable benchmark models for breast cancer diagnosis tasks. [2]
 # 
 # The selected models represent different machine learning paradigms:
 # 
-# - **Logistic Regression** – A linear probabilistic model commonly used for binary classification.
-# - **Random Forest** – An ensemble method based on multiple decision trees.
-# - **Support Vector Machine (SVM)** – A margin-based classifier that finds an optimal decision boundary.
-# - **K-Nearest Neighbours (KNN)** – A distance-based model that classifies samples based on the nearest training instances.
+# - **Logistic Regression**: A linear probabilistic model commonly used for binary classification
+# - **Random Forest**: An ensemble method based on multiple decision trees that can capture non-linear relationships
+# - **Support Vector Machine (SVM)**: A margin-based classifier that identifies a decision boundary separating the classes
+# - **K-Nearest Neighbours (KNN)**: A distance-based classifier that assigns labels based on nearby observations
 # 
-# Using different types of models allows us to compare their performance
-# and better understand which approach is most suitable for this dataset.
+# In addition, a **Dummy Classifier** is used as a naive baseline that always predicts the majority class.
 
-# ## 4.2 Baseline Model
+# ## 4.2 Test Design
 # 
-# Before training machine learning models, a baseline classifier is created.
-# The baseline model predicts the most frequent class in the training data.
+# The dataset was previously divided into training and test subsets using an 80/20 split. All models are trained on the same training dataset and evaluated on the same test dataset to ensure a fair comparison.
 # 
-# This provides a simple reference point for later model comparison.
-# A useful machine learning model should perform better than this naive approach.
+# Model performance is assessed using several standard classification metrics that capture different aspects of predictive performance [3]:
+# 
+# - **Accuracy**: Proportion of correctly classified observations
+# - **Precision**: Proportion of positive predictions that are correct
+# - **Recall**: Proportion of actual positive cases that are correctly identified
+# - **F1-score**: Harmonic mean of precision and recall
+# 
+# Using multiple evaluation metrics provides a more complete assessment of model performance than accuracy alone, particularly in medical classification tasks where false negatives are important.
+
+# ## 4.3 Baseline Model
+# 
+# A baseline classifier is used to provide a simple reference point for model comparison.  
+# 
+# The Dummy Classifier predicts the most frequent class observed in the training data. This model does not learn patterns from the predictor variables. Instead it represents the minimum level of performance that more advanced machine learning models should exceed.
 
 baseline_model = DummyClassifier(strategy="most_frequent")
 baseline_model.fit(X_train, y_train)
+
 y_pred_baseline = baseline_model.predict(X_test)
 
 baseline_accuracy = accuracy_score(y_test, y_pred_baseline)
@@ -95,23 +91,21 @@ print("Recall:", round(baseline_recall, 4))
 print("F1-score:", round(baseline_f1, 4))
 
 
-# The baseline model predicts only the majority class and therefore
-# does not provide meaningful diagnostic capability.
+# The baseline classifier achieves an accuracy of 0.6316 on the test dataset. This value corresponds to the proportion of the majority class, since the model always predicts benign cases.
 # 
-# While the accuracy may appear moderate due to class imbalance,
-# the model fails to capture the underlying patterns in the data.
+# Although the recall for the majority class is 1.0, the model fails to identify malignant tumours because it predicts only benign outcomes. Consequently, the classifier does not capture any relationship between the diagnostic features and the tumour diagnosis.
 # 
-# More advanced machine learning models should significantly
-# outperform this baseline.
+# The baseline therefore represents a minimal performance benchmark that meaningful machine learning models should clearly outperform.
 
-# ## 4.3 Logistic Regression
+# ## 4.4 Logistic Regression
 # 
-# Logistic Regression is used as a baseline machine learning model for
-# binary classification. The model estimates the probability that a sample
-# belongs to a particular class using a logistic function.
+# Logistic Regression is a widely used linear model for binary classification. The model estimates the probability that an observation belongs to a particular class using a logistic function. Logistic Regression provides an interpretable baseline model and often performs well on standardized tabular datasets. [4]
+# 
+# The parameter `max_iter=1000` increases the maximum number of iterations allowed for the optimization algorithm. This helps ensure convergence during model training, particularly when the dataset contains multiple correlated features.
 
 log_model = LogisticRegression(max_iter=1000, random_state=42)
 log_model.fit(X_train, y_train)
+
 y_pred_log = log_model.predict(X_test)
 
 log_accuracy = accuracy_score(y_test, y_pred_log)
@@ -125,69 +119,24 @@ print("Precision:", round(log_precision, 4))
 print("Recall:", round(log_recall, 4))
 print("F1-score:", round(log_f1, 4))
 
-y_prob_log = log_model.predict_proba(X_test)
 
-
-# The logistic regression model achieves very high classification performance
-# with an accuracy of 0.9825 on the test set.
+# The Logistic Regression model achieves very strong classification performance with an accuracy of 0.9825 on the test dataset.
 # 
-# This result indicates that the morphological features extracted from
-# the cell nuclei provide strong predictive information for distinguishing
-# between malignant and benign tumours.
+# This result indicates that the diagnostic features provide strong predictive information for distinguishing malignant and benign tumours. The precision, recall, and F1-score are all very high and closely aligned, indicating that the model performs consistently across different classification perspectives rather than achieving high accuracy through class imbalance alone.
 # 
-# The strong performance of a linear classifier suggests that the classes
-# are relatively well separable in the feature space.
-
-# ## 4.4 Random Forest
-# 
-# Random Forest is an ensemble learning method that combines multiple
-# decision trees to improve predictive performance and reduce overfitting.
-
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
-y_pred_rf = rf_model.predict(X_test)
-
-rf_accuracy = accuracy_score(y_test, y_pred_rf)
-rf_precision = precision_score(y_test, y_pred_rf)
-rf_recall = recall_score(y_test, y_pred_rf)
-rf_f1 = f1_score(y_test, y_pred_rf)
-
-print("Random Forest Performance")
-print("Accuracy:", round(rf_accuracy, 4))
-print("Precision:", round(rf_precision, 4))
-print("Recall:", round(rf_recall, 4))
-print("F1-score:", round(rf_f1, 4))
-
-feature_importances = pd.Series(rf_model.feature_importances_, index=X_train.columns).sort_values(ascending=False)
-top_features = feature_importances.head(10)
-plt.figure(figsize=(10,6))
-sns.barplot(x=top_features.values, y=top_features.index)
-plt.title("Top 10 Feature Importances - Random Forest")
-plt.xlabel("Importance")
-plt.ylabel("Feature")
-plt.show()
-
-
-# The Random Forest model achieves strong predictive performance,
-# confirming that ensemble methods are highly effective for tabular
-# classification tasks.
-# 
-# The feature importance analysis indicates that measurements related
-# to tumour size, such as radius, perimeter, and area, are among the
-# most influential predictors for distinguishing malignant and benign
-# cases.
-# 
-# This observation is consistent with the exploratory data analysis,
-# which showed strong correlations between these features and the
-# diagnostic outcome.
+# The strong performance of a linear classifier suggests that the two classes are largely separable in the feature space. These results are consistent with previous studies that report strong performance of logistic regression on the Wisconsin Breast Cancer dataset, including regularized variants. [4]
 
 # ## 4.5 Support Vector Machine (SVM)
 # 
-# Support Vector Machines aim to find the optimal hyperplane that
-# maximally separates the classes in feature space.
+# Support Vector Machines (SVM) are supervised learning algorithms that classify data by finding a decision boundary that maximizes the margin between classes. The model identifies a hyperplane that separates observations belonging to different categories while maximizing the distance between the closest training samples, known as support vectors.
+# 
+# SVM models are particularly effective for high-dimensional datasets and are widely used for medical classification problems. When the relationship between variables is not perfectly linear, kernel functions can be used to map the data into a higher-dimensional feature space where separation becomes easier.
+# 
+# The SVM model uses an RBF kernel, which allows the classifier to capture non-linear decision boundaries. The parameter `C` controls the trade-off between maximizing the margin and minimizing classification errors, while `gamma` determines the influence of individual training samples on the decision boundary.
 
 svm_model = SVC(kernel="rbf", C=1, gamma="scale", probability=True, random_state=42)
 svm_model.fit(X_train, y_train)
+
 y_pred_svm = svm_model.predict(X_test)
 
 svm_accuracy = accuracy_score(y_test, y_pred_svm)
@@ -202,23 +151,77 @@ print("Recall:", round(svm_recall, 4))
 print("F1-score:", round(svm_f1, 4))
 
 
-# The Support Vector Machine model achieves classification performance
-# very similar to logistic regression.
+# The Support Vector Machine model achieves very strong predictive performance with an accuracy of 0.9825 on the test dataset. The high precision, recall, and F1-score indicate that the classifier identifies both benign and malignant cases with very few misclassifications. The high precision and recall indicate that the model is effective both in avoiding false positives and in identifying actual positive cases, resulting in a balanced F1-score.
 # 
-# This suggests that the dataset is largely linearly separable, meaning
-# that a simple linear decision boundary is already sufficient to
-# distinguish between malignant and benign cases.
-# 
-# In such situations, more complex models do not necessarily lead to
-# substantial improvements in predictive performance.
+# The RBF kernel allows the model to capture non-linear decision boundaries in the feature space. This strong performance is consistent with previous studies reporting that SVM often performs among the strongest classical classifiers on the Wisconsin Breast Cancer dataset [5].
 
-# ## 4.6 K-Nearest Neighbours (KNN)
+# ## 4.6 Random Forest
 # 
-# KNN is a distance-based algorithm that classifies samples based on
-# their proximity to neighbouring training samples in feature space.
+# Random Forest is an ensemble learning algorithm that combines multiple decision trees using a bagging strategy. Each tree is trained on a random subset of the training data and predictor variables, and the final prediction is obtained by aggregating the outputs of all trees. 
+# 
+# This ensemble approach reduces the risk of overfitting and improves generalization performance compared to individual decision trees. Random Forest models are particularly well suited for tabular datasets because they can capture non-linear relationships and interactions between variables.
+# 
+# The parameter `n_estimators=100` defines the number of trees in the ensemble. Increasing the number of trees generally improves model stability but also increases computational cost.
+
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+
+y_pred_rf = rf_model.predict(X_test)
+
+rf_accuracy = accuracy_score(y_test, y_pred_rf)
+rf_precision = precision_score(y_test, y_pred_rf)
+rf_recall = recall_score(y_test, y_pred_rf)
+rf_f1 = f1_score(y_test, y_pred_rf)
+
+print("Random Forest Performance")
+print("Accuracy:", round(rf_accuracy, 4))
+print("Precision:", round(rf_precision, 4))
+print("Recall:", round(rf_recall, 4))
+print("F1-score:", round(rf_f1, 4))
+
+
+# The Random Forest model achieves strong predictive performance with an accuracy of 0.9561 on the test dataset.
+# 
+# The precision, recall, and F1-score remain high, indicating that the model performs reliably across both classes, even though its overall accuracy is slightly lower than that of Logistic Regression and SVM.
+# 
+# Ensemble models are particularly useful because they combine the predictions of multiple decision trees, which often improves model stability and robustness. Previous studies using the Wisconsin Breast Cancer dataset report strong predictive performance for Random Forest classifiers and demonstrate that ensemble methods are effective for breast cancer diagnosis tasks. [6]
+
+# ### Feature Importance
+# 
+# The feature importance analysis indicates which diagnostic measurements receive the highest importance scores in the Random Forest model.
+
+feature_importances = pd.Series(
+    rf_model.feature_importances_,
+    index=X_train.columns
+).sort_values(ascending=False)
+
+top_features = feature_importances.head(10)
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=top_features.values, y=top_features.index)
+
+plt.title("Top 10 Feature Importances - Random Forest")
+plt.xlabel("Importance")
+plt.ylabel("Feature")
+
+plt.show()
+
+
+# The most influential predictors include **worst area**, **worst concave points**, **worst radius**, and **mean concave points**. These features describe geometric characteristics of the cell nuclei and reflect structural differences between malignant and benign tumours.
+# 
+# In particular, measurements related to tumour size and boundary irregularities appear to be highly informative for the classification task. This observation is consistent with previous research on the Wisconsin Breast Cancer dataset, which reports that morphological features of cell nuclei provide strong predictive information for breast cancer diagnosis. [6]
+
+# ## 4.7 K-Nearest Neighbours (KNN)
+# 
+# The K-Nearest Neighbours (KNN) algorithm is a non-parametric classification method that assigns class labels based on the labels of the nearest training samples in the feature space. The algorithm measures the distance between observations and predicts the class of a new instance according to the majority class among its k closest neighbours.
+# 
+# KNN is a simple yet effective algorithm for classification tasks. Because predictions are based directly on the training data, the algorithm can capture complex decision boundaries without explicitly learning a parametric model.
+# 
+# The parameter `n_neighbors=5` determines how many neighbouring observations are considered when assigning a class label to a new sample. Smaller values allow the model to capture more local patterns, while larger values produce smoother decision boundaries.
 
 knn_model = KNeighborsClassifier(n_neighbors=5)
 knn_model.fit(X_train, y_train)
+
 y_pred_knn = knn_model.predict(X_test)
 
 knn_accuracy = accuracy_score(y_test, y_pred_knn)
@@ -233,25 +236,17 @@ print("Recall:", round(knn_recall, 4))
 print("F1-score:", round(knn_f1, 4))
 
 
-# The KNN model achieves strong classification performance, indicating
-# that similar tumour cases are located close to each other in the feature space.
+# The K-Nearest Neighbours model achieves an accuracy of **0.9561** on the test dataset. The precision, recall, and F1-score remain strong, indicating that the model performs reliably despite being somewhat less accurate than the best-performing classifiers.
 # 
-# This result confirms that the scaled diagnostic features provide a meaningful
-# representation for distance-based classification.
+# The model classifies observations based on the similarity of diagnostic measurements in the feature space. Because the predictor variables were standardized during the data preparation phase, all features contribute equally to the distance calculations used by the KNN algorithm.
 # 
-# However, KNN may be more sensitive to the choice of hyperparameters and
-# the local structure of the data than some of the other evaluated models.
+# The obtained performance is slightly lower than the results achieved by Logistic Regression and SVM, but still clearly exceeds the baseline classifier. This indicates that tumour samples with similar morphological characteristics tend to cluster together in the feature space, allowing distance-based methods such as KNN to distinguish between benign and malignant cases effectively.
+# 
+# Previous studies applying KNN to the Wisconsin Breast Cancer dataset report comparable classification accuracies, typically above 95% depending on the choice of neighbourhood size and preprocessing strategy. [7]
 
-# ## 4.7 Hyperparameter Tuning
-
-# ## 4.8 Model Comparison
+# ## 4.8 Model Assessment
 # 
-# The results show the performance differences between the evaluated models.
-# More advanced models such as Random Forest and SVM typically achieve
-# higher predictive performance compared to simpler baseline models.
-# 
-# The comparison allows us to identify the most suitable model for
-# the breast cancer classification task.
+# The classification results of the evaluated models are summarized below.
 
 results = pd.DataFrame({
 
@@ -298,5 +293,34 @@ results = pd.DataFrame({
 
 results = results.sort_values("Accuracy", ascending=False)
 results.reset_index(drop=True, inplace=True)
+
 results
 
+
+# All machine learning models substantially outperform the baseline classifier, indicating that the diagnostic features extracted from the breast cell nuclei contain strong predictive information for distinguishing benign and malignant tumours.
+# 
+# Among the evaluated models, **Logistic Regression and Support Vector Machine achieve the highest performance**, both reaching an accuracy of **0.9825** on the test dataset. The high precision, recall, and F1-scores indicate that these models correctly identify most malignant and benign cases with very few misclassifications.
+# 
+# The **Random Forest** and **K-Nearest Neighbours** models also demonstrate strong predictive performance, achieving accuracies above **95%**, but slightly lower than the linear models. This suggests that while non-linear and distance-based methods perform well on the dataset, they do not provide a substantial improvement over simpler models.
+# 
+# One possible explanation is that the diagnostic features in the Wisconsin Breast Cancer dataset allow the two classes to be separated relatively well in the feature space. In such cases, linear classifiers such as Logistic Regression can already achieve very strong predictive performance.
+# 
+# Considering both predictive accuracy and model interpretability, **Logistic Regression can be regarded as a particularly suitable model for this classification task**. Linear models provide coefficients that can be interpreted in relation to the diagnostic features, which is beneficial in medical decision support systems where transparency is important.
+# 
+# The results confirm that classical machine learning models are capable of achieving very high classification accuracy for breast cancer diagnosis when applied to the Wisconsin Breast Cancer dataset.
+
+# ## References
+# 
+# [1] IBM Corporation (2011): *IBM SPSS Modeler CRISP-DM Guide*
+# 
+# [2] Rovshenov, A.; Peker, S. (2022): *Performance Comparison of Different Machine Learning Techniques for Early Prediction of Breast Cancer using Wisconsin Breast Cancer Dataset*
+# 
+# [3] Müller, A. C.; Guido, S. (2016): *Introduction to Machine Learning with Python*
+# 
+# [4] Vinoci, K. L. (2023): *Wisconsin Breast Cancer Detection Using L1 Logistic Regression*
+# 
+# [5] Patel, K. et al. (2025): *Developing Machine Learning Models to Detect Breast Cancer*
+# 
+# [6] Ono, Y.; Mitani, Y. (2022): *Evaluation of feature extraction methods with ensemble learning for breast cancer classification*
+# 
+# [7] Filani, A.; Arogundade, S. (2024): *Optimized Breast Cancer Prediction Using Machine Learning Algorithms*

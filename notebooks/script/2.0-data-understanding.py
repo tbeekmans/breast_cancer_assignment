@@ -23,17 +23,17 @@ pd.set_option('display.max_columns', None)
 
 # # 2.0 Data Understanding
 # 
-# The data understanding phase aims to explore the dataset in order to understand its structure, identify relevant patterns, and detect potential data quality issues.
+# Following the CRISP-DM methodology, the data understanding phase aims to explore the dataset in order to understand its structure, identify relevant patterns, and detect potential data quality issues. [1]
 # 
-# Following the CRISP-DM methodology, this phase includes collecting the data, describing its structure, verifying data quality, and exploring relationships between features and the target variable.
+# This phase includes collecting the data, describing its structure, verifying data quality, and exploring relationships between features and the target variable.
 
 # ## 2.1 Data Collection
 # 
 # This section describes the source of the dataset and how it is accessed within the project workflow.
 # 
-# The dataset used in this project is the "Breast Cancer Wisconsin (Diagnostic)" dataset from the UCI Machine Learning Repository. [1]
+# The dataset used in this project is the "Breast Cancer Wisconsin (Diagnostic)" dataset from the UCI Machine Learning Repository. [2]
 # 
-# The dataset contains 569 records [1], which is relatively small compared to many machine learning datasets.
+# The dataset contains 569 records [2], which is relatively small compared to many machine learning datasets.
 # 
 # Only a single data source is used in this project. No additional datasets are merged, which simplifies the data integration process and avoids potential inconsistencies between different sources.
 # 
@@ -54,7 +54,7 @@ df = load_data()
 # This section describes the structure and characteristics of the dataset used in the analysis.  
 # Following the CRISP-DM methodology, the dataset is examined with respect to its size, variable types, and coding scheme.
 # 
-# The dataset consists of 569 observations and 30 numerical features describing morphological characteristics of cell nuclei extracted from digitized images of fine needle aspirate (FNA) samples of breast masses. [1]
+# The dataset consists of 569 observations and 30 numerical features describing morphological characteristics of cell nuclei extracted from digitized images of fine needle aspirate (FNA) samples of breast masses. [3]
 # 
 # Ten core characteristics of the cell nuclei are measured:
 # 
@@ -75,7 +75,7 @@ df = load_data()
 # - standard error
 # - worst value
 # 
-# The dataset therefore contains 30 numerical predictor variables describing tumour cell morphology.   In addition to these features, the dataset contains a diagnostic label indicating whether the tumour is malignant or benign. This variable serves as the target variable for the classification task. [1]
+# The dataset therefore contains 30 numerical predictor variables describing tumour cell morphology. In addition to these features, the dataset contains a diagnostic label indicating whether the tumour is malignant or benign. This variable serves as the target variable for the classification task. [2]
 # 
 # The following analysis examines the dataset structure by inspecting its dimensions, variable types, and sample records.
 
@@ -100,7 +100,7 @@ df.dtypes
 
 # All predictor variables are numerical. The dataset also contains one binary target variable representing the tumour diagnosis.
 # 
-# According to the dataset documentation [1], the encoding of the target variable is defined as:
+# According to the dataset documentation [2], the encoding of the target variable is defined as:
 # 
 # - 0 = malignant tumour
 # - 1 = benign tumour
@@ -125,7 +125,7 @@ df.sample(10)
 # 
 # Following the CRISP-DM methodology, the data quality verification step examines the dataset for potential issues that may affect later modeling stages. Typical data quality problems include missing values, duplicate records, invalid values, measurement errors or inconsistencies in the data representation.
 # 
-# Identifying such issues at an early stage helps ensure that the dataset is suitable for machine learning tasks and prevents modeling results from being affected by data errors or inconsistencies. [2]
+# Identifying such issues at an early stage helps ensure that the dataset is suitable for machine learning tasks and prevents modeling results from being affected by data errors or inconsistencies.
 
 # ### Missing Values
 # 
@@ -143,7 +143,7 @@ print(f"Total missing values: {missing_values.sum()}")
 missing_values_df.round(2)
 
 
-# The inspection shows that the dataset does not contain missing values.   All observations have complete feature information, meaning no imputation or removal of records is required.
+# The inspection shows that the dataset does not contain missing values. All observations have complete feature information, meaning no imputation or removal of records is required.
 
 # ### Duplicates
 # 
@@ -170,7 +170,7 @@ print(f"Columns with negative values: {neg_columns if neg_columns else 'None'}")
 # 
 # Outliers are examined to identify extreme observations that may influence statistical analysis or machine learning models.
 # 
-# Two statistical methods are widely used to detect potential outliers in numerical datasets [3]:
+# Two common statistical approaches are used to identify potential outliers in numerical datasets [5]:
 # 
 # - **Interquartile Range (IQR):** The IQR method defines outliers as observations falling below Q1 − 1.5 × IQR or above Q3 + 1.5 × IQR (where IQR represents the interquartile range = Q3 − Q1)
 # 
@@ -221,7 +221,7 @@ display(outlier_df.sort_values('Z-Score Outliers', ascending=False).head(10))
 # **Z-Score:**  
 # The Z-score method highlights a similar pattern. Variables such as `compactness error`, `symmetry error`, and `worst compactness` appear among the features with the highest number of extreme observations, indicating that several shape-related tumour characteristics also contain values that deviate strongly from the dataset mean.
 # 
-# In biomedical datasets such extreme observations do not necessarily represent data errors. They may reflect biological variability in tumour morphology or measurement variability in medical imaging data. [5]
+# In biomedical datasets such extreme observations do not necessarily represent data errors. They may reflect biological variability in tumour morphology or measurement variability in medical imaging data. [4]
 # 
 # Removing these observations without domain-specific justification may lead to the loss of relevant information. For this reason potential outliers are not removed at this stage. Their influence will instead be addressed during later preprocessing steps, for example through feature scaling or the use of machine learning models that are less sensitive to extreme values.
 
@@ -229,7 +229,7 @@ display(outlier_df.sort_values('Z-Score Outliers', ascending=False).head(10))
 # 
 # This section explores patterns and relationships within the dataset in order to better understand the behaviour of the features and their connection to the target variable.
 # 
-# Exploratory analysis helps to identify potentially relevant attributes, reveal hidden structures in the data, and formulate hypotheses about which variables may be most useful for the classification task. [2]
+# Exploratory analysis helps to identify potentially relevant attributes, reveal hidden structures in the data, and formulate hypotheses about which variables may be most useful for the classification task.
 # 
 # The analysis focuses on descriptive statistics, class distribution, correlations between features, and relationships between features and the diagnostic outcome.
 
@@ -260,7 +260,7 @@ df.describe().round(2)
 # 
 # Additional statistical metrics are calculated to further analyze the distributional characteristics of the dataset features. These statistics help to better understand the properties of the features and support later modeling decisions, such as feature scaling or the selection of algorithms that are robust to non-normal data distributions.
 # 
-# Measures such as variance, skewness, and kurtosis provide information about variability, asymmetry, and the tail behaviour of feature distributions. [6]
+# Measures such as variance, skewness, and kurtosis provide information about variability, asymmetry, and the tail behaviour of feature distributions. [5]
 
 median = df.median(numeric_only=True)
 variance = df.var(numeric_only=True)
@@ -314,7 +314,7 @@ plt.show()
 
 # The target distribution shows that benign tumour cases occur more frequently than malignant cases in the dataset. The dataset contains 357 benign cases (62.7%) and 212 malignant cases (37.3%).
 # 
-# Although the dataset is not perfectly balanced, the class distribution shows only a moderate imbalance and both classes are sufficiently represented for training classification models.
+# Although the dataset is not perfectly balanced, the class distribution shows only a moderate imbalance and both classes are sufficiently represented for training classification models. Although the imbalance is moderate, class distribution remains relevant in medical classification tasks because performance can be affected when malignant cases are less frequent than benign cases. [6]
 # 
 # Class imbalance should be considered when evaluating model performance. In medical diagnosis tasks, correctly identifying malignant tumours is particularly important. Therefore, evaluation metrics such as recall, precision, and the confusion matrix will be considered in addition to overall accuracy.
 
@@ -322,7 +322,7 @@ plt.show()
 # 
 # A correlation matrix is calculated to examine relationships between the numerical features.
 # 
-# Highly correlated variables may capture similar information about tumour morphology. Such redundancy can lead to multicollinearity [6], which may influence certain machine learning algorithms, particularly linear models and distance-based methods. In this cases feature selection or regularisation techniques may help reduce redundancy and improve model stability.
+# Highly correlated variables may capture similar information about tumour morphology. Such redundancy can lead to multicollinearity [5], which may influence certain machine learning algorithms, particularly linear models and distance-based methods. In this cases feature selection or regularisation techniques may help reduce redundancy and improve model stability.
 
 # #### Correlation Heatmap
 # 
@@ -365,7 +365,7 @@ high_corr_pairs[high_corr_pairs["Correlation"] > corr_threshold].head(10)
 # 
 # In particular, measurements related to tumour size exhibit extremely high correlations. For example, `mean radius` and `mean perimeter` show a correlation of 0.998, while `mean radius` and `mean area` reach a correlation of approximately 0.987. Similar relationships can be observed for the corresponding “worst” measurements, such as `worst radius`, `worst perimeter`, and `worst area`.
 # 
-# These strong correlations are expected because these variables describe related geometric properties of tumour cell structures. For instance, larger cell radii naturally correspond to larger perimeters and areas.
+# These strong correlations are expected because these variables describe related geometric properties of tumour cell structures. For instance, larger cell radi naturally correspond to larger perimeters and areas.
 # 
 # Such strong correlations indicate a high degree of feature redundancy within the dataset. In machine learning models, this can lead to multicollinearity, which may affect model interpretability and stability. Therefore, feature selection or regularisation techniques may be considered during later modelling stages to reduce redundancy.
 
@@ -373,7 +373,7 @@ high_corr_pairs[high_corr_pairs["Correlation"] > corr_threshold].head(10)
 # 
 # To examine how strongly individual features are associated with the diagnostic outcome, the relationship between each numerical feature and the target variable is analysed.
 # 
-# Because the target variable represents a binary class label (malignant vs. benign), the point-biserial correlation coefficient is used. The point-biserial correlation measures the relationship between a continuous variable and a binary variable and can be interpreted as a special case of the Pearson correlation coefficient where one variable is dichotomous. [7]
+# Because the target variable represents a binary class label (malignant vs. benign), the point-biserial correlation coefficient is used. The point-biserial correlation measures the relationship between a continuous variable and a binary variable and can be interpreted as a special case of the Pearson correlation coefficient where one variable is dichotomous. [5]
 # 
 # Features with higher absolute point-biserial correlation values indicate stronger statistical association with the tumour diagnosis.
 
@@ -406,9 +406,9 @@ plt.show()
 # 
 # The results indicate that malignant tumours tend to exhibit larger cell nuclei and more irregular nuclear boundaries. Features related to concavity and concave points capture structural irregularities of the tumour cell border, while variables such as radius, perimeter, and area represent overall tumour size.
 # 
-# These findings are consistent with the dataset description and previous medical research on the Wisconsin Breast Cancer dataset, where geometric characteristics of cell nuclei were identified as important indicators for tumour malignancy. [4]
+# These findings are consistent with the dataset description and previous medical research on the Wisconsin Breast Cancer dataset, where geometric characteristics of cell nuclei were identified as important indicators for tumour malignancy. [3]
 # 
-# Overall, the results suggest that morphological measurements describing tumour size and structural irregularities provide strong predictive information for distinguishing malignant and benign tumour cases.
+# The results suggest that morphological measurements describing tumour size and structural irregularities provide strong predictive information for distinguishing malignant and benign tumour cases.
 
 # ### 2.4.5 Feature Distribution Analysis
 # 
@@ -472,16 +472,14 @@ plt.show()
 
 # ## References
 # 
-# [1] UCI Machine Learning Repository: Breast Cancer Wisconsin (Diagnostic) Dataset. Retrieved from https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)
+# [1] IBM Corporation (2011): *IBM SPSS Modeler CRISP-DM Guide*
 # 
-# [2] IBM Corporation (2011): IBM SPSS Modeler CRISP-DM Guide
+# [2] UCI Machine Learning Repository (1995): *Breast Cancer Wisconsin (Diagnostic)*. Retrieved from https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)
 # 
-# [3] Aggarwal, C. C. (2017): Outlier Analysis (2nd Edition)
+# [3] Street, W. N.; Wolberg, W. H.; Mangasarian, O. L. (1993): *Nuclear feature extraction for breast tumor diagnosis*
 # 
-# [4] Street, W. N.; Wolberg, W. H.; Mangasarian, O. L. (1993): Nuclear feature extraction for breast tumor diagnosis
+# [4] Sidey-Gibbons, J. A. M.; Sidey-Gibbons, C. J. (2019): *Machine learning in medicine: a practical introduction*
 # 
-# [5] Sidey-Gibbons J. A. M.; Sidey-Gibbons, C. J. (2019): Machine learning in medicine: a practical introduction
+# [5] James, G.; Witten, D.; Hastie, T.; Tibshirani, R. (2023): *An Introduction to Statistical Learning with Applications in Python*
 # 
-# [6] James, G.; Witten, D.; Hastie, T.; Tibshirani, R. (2013): An Introduction to Statistical Learning
-# 
-# [7] Cohen, J.; Cohen, P.; West, S. G.; Aiken, L. S. (2013): Applied Multiple Regression/Correlation Analysis for the Behavioral Sciences
+# [6] Basu, U.; Yan, Y. (2025): *Data Balancing in Breast Cancer Recognition Using the Wisconsin Breast Cancer Dataset*
