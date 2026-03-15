@@ -110,8 +110,8 @@
 # | Risk | Impact | Contingency |
 # |-----|------|-------------|
 # | Overfitting due to small dataset size | Model may perform well on training data but poorly on new samples | Use cross-validation and evaluate models on a separate test set |
-# | Limited medical domain expertise | Incorrect interpretation of feature relevance or model results | Conduct literature research and focus on statistical interpretation rather than clinical conclusions |
-# | Strong feature correlations | Some models may become unstable or biased | Apply feature selection or regularization techniques |
+# | Limited medical domain knowledge | Incorrect interpretation of feature relevance or model results | Conduct literature research and focus on statistical interpretation rather than clinical conclusions |
+# | Strong feature correlations | Some models may become unstable or biased | Consider feature selection or regularization techniques |
 
 # ## 1.9 Project Plan
 # 
