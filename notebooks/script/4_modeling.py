@@ -291,7 +291,7 @@ cv_results_df.sort_values("CV Accuracy Mean", ascending=False)
 # 
 # The classification results of the evaluated models are summarized below.
 
-results = pd.DataFrame({
+results_df = pd.DataFrame({
 
     "Model": [
         "Baseline",
@@ -334,10 +334,10 @@ results = pd.DataFrame({
     ]
 })
 
-results = results.sort_values("Accuracy", ascending=False)
-results.reset_index(drop=True, inplace=True)
+results_df = results_df.sort_values("Accuracy", ascending=False)
+results_df.reset_index(drop=True, inplace=True)
 
-results
+results_df
 
 
 # All machine learning models substantially outperform the baseline classifier, indicating that the diagnostic features extracted from the breast cell nuclei contain strong predictive information for distinguishing benign and malignant tumors.

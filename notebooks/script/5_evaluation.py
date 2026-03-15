@@ -200,7 +200,7 @@ plt.show()
 
 # ## 5.4 Final Model Selection
 # 
-# Both Logistic Regression and Support Vector Machine achieved the strongest predictive performance across the evaluation metrics. The confusion matrix analysis showed that both models correctly classified almost all tumor cases and produced only one false negative each. In addition, both models achieved the highest AUC values in the ROC analysis, indicating excellent discrimination between malignant and benign cases.
+# Both Logistic Regression and Support Vector Machine achieved the strongest predictive performance across the evaluation metrics. The confusion matrix analysis showed that both models correctly classified almost all tumor cases and produced only one false negative each. In addition, both models achieved the highest AUC values in the ROC analysis, indicating excellent differentiation between malignant and benign cases.
 # 
 # Since the predictive performance of Logistic Regression and SVM is nearly identical, the final model selection focuses on model interpretability and simplicity. Logistic Regression provides a more transparent modeling approach because the relationship between the input features and the predicted outcome can be examined through the model coefficients. This makes the model behavior easier to interpret and explain.
 # 
@@ -220,9 +220,7 @@ plt.show()
 # 
 # 3) Several diagnostic features in the dataset show strong correlations. While this did not negatively affect predictive performance, high feature correlations may influence model stability or interpretability in some modeling approaches.
 # 
-# The modeling phase focused on comparing several classical machine learning algorithms using standard parameter configurations. Hyperparameter tuning, feature selection, or dimensionality reduction techniques such as principal component analysis (PCA) could potentially further improve model performance.
-# 
-# Some related studies also explore feature selection or dimensionality reduction methods to improve model efficiency and reduce redundancy among highly correlated variables.
+# Hyperparameter tuning, feature selection, or dimensionality reduction techniques such as principal component analysis (PCA) could potentially further improve model performance. Some related studies also explore feature selection or dimensionality reduction methods to improve model efficiency and reduce redundancy among highly correlated variables. [4]
 
 # ## 5.6 Future Work
 # 
@@ -241,3 +239,5 @@ plt.show()
 # [2] James, G.; Witten, D.; Hastie, T.; Tibshirani, R. (2023): *An Introduction to Statistical Learning with Applications in Python*
 # 
 # [3] Müller, A. C.; Guido, S. (2016): *Introduction to Machine Learning with Python*
+# 
+# [4] Ono, Y.; Mitani, Y. (2022): *Evaluation of feature extraction methods with ensemble learning for breast cancer classification*

@@ -468,7 +468,7 @@ plt.show()
 # 
 # **5. Clear distribution differences between tumor classes**
 # 
-# The feature distribution analysis demonstrated noticeable differences between malignant and benign tumor cases. Malignant tumours tend to exhibit larger values and greater variability for several morphological measurements. These patterns confirm that the extracted features contain meaningful diagnostic information and are suitable for machine learning classification tasks.
+# The feature distribution analysis demonstrated noticeable differences between malignant and benign tumor cases. Malignant tumors tend to exhibit larger values and greater variability for several morphological measurements. These patterns confirm that the extracted features contain meaningful diagnostic information and are suitable for machine learning classification tasks.
 
 # ## References
 # 

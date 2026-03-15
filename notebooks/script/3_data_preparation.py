@@ -105,7 +105,6 @@ print(y_test.value_counts(normalize=True))
 # 
 # The scaler is fitted only on the training data and then applied to both the training and test sets. This approach prevents data leakage and ensures that information from the test data does not influence the training process. [5]
 
-# Initialize scaler
 scaler = StandardScaler()
 
 # Fit scaler on training data
